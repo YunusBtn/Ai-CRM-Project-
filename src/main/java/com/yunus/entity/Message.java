@@ -27,7 +27,7 @@ public class Message extends BaseEntity {
     private SenderType senderType;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "conversation_id")
+    @JoinColumn(name = "sender_user_id")
     private User senderUser;
 
 

@@ -36,6 +36,7 @@ public class Customer extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private CustomerStatus status;
 
+    @ManyToMany(fetch = FetchType.LAZY)
     private Set<Tag> tags = new HashSet<>();
 
     public void addTag(Tag tag) {
