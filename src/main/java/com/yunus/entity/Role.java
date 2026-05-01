@@ -1,8 +1,6 @@
 package com.yunus.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Getter
@@ -11,10 +9,18 @@ import lombok.*;
 @Table(name = "roles")
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Role extends BaseEntity{
 
+
+    public enum RoleName{
+        ADMIN, AGENT, CUSTOMER
+    }
+
+
     @Column(nullable = false, unique = true, length = 30)
-    private String name;
+    @Enumerated(EnumType.STRING)
+    private RoleName name;
 
 
 }
