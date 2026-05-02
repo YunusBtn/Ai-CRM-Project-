@@ -28,7 +28,7 @@ public class Note extends BaseEntity{
 
     @ManyToOne(fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "created_by_id",nullable = false)
-    private Agent createdBy;
+    private User createdBy;
 
 
 

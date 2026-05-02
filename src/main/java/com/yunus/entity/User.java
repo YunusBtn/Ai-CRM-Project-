@@ -4,9 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.HashSet;
-import java.util.Set;
-
 @Getter
 @Setter
 @Entity
@@ -15,19 +12,26 @@ import java.util.Set;
 @NoArgsConstructor
 @Builder
 public class User extends BaseEntity {
-
-    @Column(unique = true, nullable = false)
-    private String username;
+    @Column(unique = true, length = 100, nullable = false)
+    private String email;
 
     @Column(nullable = false)
     @JsonIgnore
     private String password;
 
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "user_roles",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Role> roles = new HashSet<>();
+    private String firstName;
+
+    private String lastName;
+
+
+    private boolean isDeleted = false;
+
+    private boolean isActive = true;
+
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "role_id")
+    private Role role;
 
 
 }

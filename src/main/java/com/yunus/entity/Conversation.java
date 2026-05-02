@@ -33,14 +33,14 @@ public class Conversation extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "assigned_to")
-    private Agent assignedTo;
+    private User assignedTo;
 
     public void changeStatus(ConversationStatus status) {
         this.status = status;
     }
 
-    public void assignTo(Agent agent) {
-        this.assignedTo = agent;
+    public void assignTo(User user) {
+        this.assignedTo = user;
     }
 
 
