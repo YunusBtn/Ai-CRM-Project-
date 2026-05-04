@@ -8,7 +8,6 @@ public class BusinessException extends RuntimeException {
         super(errorType.getMessage() + " " + detailMessage);
         this.errorType = errorType;
     }
-
     public ErrorType getErrorType() {
         return errorType;
     }
