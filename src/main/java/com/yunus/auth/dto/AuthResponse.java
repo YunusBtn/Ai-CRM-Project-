@@ -1,4 +1,4 @@
-package com.yunus.dto;
+package com.yunus.auth.dto;
 
 public record AuthResponse(
 

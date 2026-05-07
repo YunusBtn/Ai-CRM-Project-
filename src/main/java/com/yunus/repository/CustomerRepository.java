@@ -1,0 +1,27 @@
+package com.yunus.repository;
+
+import com.yunus.entity.Customer;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
+import java.util.UUID;
+
+@Repository
+public interface CustomerRepository extends JpaRepository<Customer, UUID> {
+
+    Optional<Customer> findByIdAndIsDeletedFalse(UUID id);
+
+    Page<Customer> findAllByIsDeletedFalse(Pageable pageable);
+
+    boolean existsByEmailIgnoreCaseAndIsDeletedFalse(String email);
+
+    boolean existsByPhoneAndIsDeletedFalse(String phone);
+
+
+
+
+
+}

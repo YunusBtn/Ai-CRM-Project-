@@ -1,4 +1,4 @@
-package com.yunus.service;
+package com.yunus.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

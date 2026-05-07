@@ -1,9 +1,8 @@
-package com.yunus.controller;
+package com.yunus.auth;
 
-import com.yunus.dto.AuthResponse;
-import com.yunus.dto.LoginRequest;
-import com.yunus.dto.RegisterRequest;
-import com.yunus.service.AuthService;
+import com.yunus.auth.dto.AuthResponse;
+import com.yunus.auth.dto.LoginRequest;
+import com.yunus.auth.dto.RegisterRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;

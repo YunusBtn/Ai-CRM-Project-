@@ -31,12 +31,16 @@ public class Customer extends BaseEntity {
     @Column(unique = true, length = 11)
     private String phone;
 
+    @Column(nullable = false)
     private boolean isDeleted = false;
 
     @Enumerated(EnumType.STRING)
     private CustomerStatus status;
 
     @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "customer_tag",
+            joinColumns = @JoinColumn(name = "customer_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id"))
     private Set<Tag> tags = new HashSet<>();
 
     public void addTag(Tag tag) {

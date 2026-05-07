@@ -1,5 +1,6 @@
-package com.yunus.entity;
+package com.yunus.security;
 
+import com.yunus.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

@@ -1,7 +1,5 @@
-package com.yunus.config;
+package com.yunus.security;
 
-import com.yunus.service.CustomUserDetailsService;
-import com.yunus.service.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
