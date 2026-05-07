@@ -1,6 +1,6 @@
 package com.yunus.customer;
 
-import com.yunus.common.dto.PageResponse;
+import com.yunus.common.PageResponse;
 import com.yunus.customer.dto.CustomerCreateRequest;
 import com.yunus.customer.dto.CustomerResponse;
 import com.yunus.customer.dto.CustomerUpdateRequest;

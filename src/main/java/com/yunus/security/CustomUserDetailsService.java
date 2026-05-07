@@ -1,7 +1,7 @@
 package com.yunus.security;
 
-import com.yunus.entity.User;
-import com.yunus.repository.UserRepository;
+import com.yunus.auth.entity.User;
+import com.yunus.auth.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

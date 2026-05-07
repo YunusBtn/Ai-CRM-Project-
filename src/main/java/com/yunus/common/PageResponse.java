@@ -1,4 +1,4 @@
-package com.yunus.common.dto;
+package com.yunus.common;
 
 import org.springframework.data.domain.Page;
 

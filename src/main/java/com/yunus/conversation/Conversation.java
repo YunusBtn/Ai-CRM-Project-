@@ -1,5 +1,8 @@
-package com.yunus.entity;
+package com.yunus.conversation;
 
+import com.yunus.auth.entity.User;
+import com.yunus.common.BaseEntity;
+import com.yunus.customer.Customer;
 import com.yunus.enums.ConversationStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -20,6 +23,8 @@ public class Conversation extends BaseEntity {
 
     private String title;
     private LocalDateTime lastMessageAt;
+
+    @Column(nullable = false)
     private boolean isDeleted = false;
 
     @Enumerated(EnumType.STRING)

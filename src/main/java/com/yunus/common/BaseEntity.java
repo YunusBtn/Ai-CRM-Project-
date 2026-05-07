@@ -1,4 +1,4 @@
-package com.yunus.entity;
+package com.yunus.common;
 
 import jakarta.persistence.*;
 import lombok.Getter;

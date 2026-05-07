@@ -1,5 +1,8 @@
-package com.yunus.entity;
+package com.yunus.message;
 
+import com.yunus.auth.entity.User;
+import com.yunus.common.BaseEntity;
+import com.yunus.conversation.Conversation;
 import com.yunus.enums.MessageDirection;
 import com.yunus.enums.SenderType;
 import jakarta.persistence.*;

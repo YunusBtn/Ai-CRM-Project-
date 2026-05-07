@@ -2,7 +2,6 @@ package com.yunus.customer;
 
 import com.yunus.customer.dto.CustomerCreateRequest;
 import com.yunus.customer.dto.CustomerResponse;
-import com.yunus.entity.Customer;
 import com.yunus.tag.TagMapper;
 import org.mapstruct.Mapper;
 

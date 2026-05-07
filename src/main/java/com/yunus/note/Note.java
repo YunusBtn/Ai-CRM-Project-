@@ -1,5 +1,9 @@
-package com.yunus.entity;
+package com.yunus.note;
 
+import com.yunus.auth.entity.User;
+import com.yunus.common.BaseEntity;
+import com.yunus.conversation.Conversation;
+import com.yunus.customer.Customer;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,7 +16,7 @@ import lombok.Setter;
 @Table(name = "notes")
 @NoArgsConstructor
 @AllArgsConstructor
-public class Note extends BaseEntity{
+public class Note extends BaseEntity {
 
     @Column(nullable = false,columnDefinition = "TEXT")
     private String content;

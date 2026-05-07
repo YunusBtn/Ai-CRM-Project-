@@ -1,6 +1,5 @@
 package com.yunus.tag;
 
-import com.yunus.entity.Tag;
 import com.yunus.tag.dto.TagCreateRequest;
 import com.yunus.tag.dto.TagResponse;
 import org.mapstruct.Mapper;

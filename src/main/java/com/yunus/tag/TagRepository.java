@@ -1,6 +1,5 @@
-package com.yunus.repository;
+package com.yunus.tag;
 
-import com.yunus.entity.Tag;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

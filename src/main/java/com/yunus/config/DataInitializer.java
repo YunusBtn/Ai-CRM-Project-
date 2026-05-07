@@ -1,7 +1,7 @@
 package com.yunus.config;
 
-import com.yunus.entity.Role;
-import com.yunus.repository.RoleRepository;
+import com.yunus.auth.entity.Role;
+import com.yunus.auth.repository.RoleRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;

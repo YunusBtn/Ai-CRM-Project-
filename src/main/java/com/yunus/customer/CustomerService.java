@@ -1,15 +1,13 @@
 package com.yunus.customer;
 
-import com.yunus.common.dto.PageResponse;
+import com.yunus.common.PageResponse;
 import com.yunus.customer.dto.CustomerCreateRequest;
 import com.yunus.customer.dto.CustomerResponse;
 import com.yunus.customer.dto.CustomerUpdateRequest;
-import com.yunus.entity.Customer;
-import com.yunus.entity.Tag;
+import com.yunus.tag.Tag;
 import com.yunus.exception.BusinessException;
 import com.yunus.exception.ErrorType;
-import com.yunus.repository.CustomerRepository;
-import com.yunus.repository.TagRepository;
+import com.yunus.tag.TagRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

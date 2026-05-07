@@ -1,6 +1,6 @@
-package com.yunus.repository;
+package com.yunus.auth.repository;
 
-import com.yunus.entity.Role;
+import com.yunus.auth.entity.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

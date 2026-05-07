@@ -1,6 +1,6 @@
 package com.yunus.tag;
 
-import com.yunus.common.dto.PageResponse;
+import com.yunus.common.PageResponse;
 import com.yunus.tag.dto.TagCreateRequest;
 import com.yunus.tag.dto.TagResponse;
 import com.yunus.tag.dto.TagUpdateRequest;

@@ -1,5 +1,7 @@
-package com.yunus.entity;
+package com.yunus.customer;
 
+import com.yunus.common.BaseEntity;
+import com.yunus.tag.Tag;
 import com.yunus.enums.CustomerStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;

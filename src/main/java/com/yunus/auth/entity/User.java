@@ -1,6 +1,7 @@
-package com.yunus.entity;
+package com.yunus.auth.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.yunus.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 

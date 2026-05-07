@@ -1,5 +1,6 @@
-package com.yunus.entity;
+package com.yunus.tag;
 
+import com.yunus.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -9,7 +10,7 @@ import lombok.*;
 @Table(name = "tags")
 @AllArgsConstructor
 @NoArgsConstructor
-public class Tag extends BaseEntity{
+public class Tag extends BaseEntity {
 
     @Column(nullable = false, unique = true, length = 100)
     private String name;
