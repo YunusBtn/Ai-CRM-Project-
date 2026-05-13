@@ -2,6 +2,7 @@ package com.yunus.auth;
 import com.yunus.auth.dto.AuthResponse;
 import com.yunus.auth.dto.LoginRequest;
 import com.yunus.auth.dto.RegisterRequest;
+import com.yunus.auth.dto.UserRoleUpdateRequest;
 import com.yunus.auth.entity.Role;
 import com.yunus.auth.entity.User;
 import com.yunus.exception.BusinessException;
@@ -17,6 +18,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.UUID;
 
 
 @Service
@@ -68,6 +71,24 @@ public class AuthService {
         String token = jwtService.generateToken(userDetails);
 
         return new AuthResponse(token, request.email(), "User logged in successfully");
+    }
+
+    @Transactional
+    public void updateUserRole(UUID userId, UserRoleUpdateRequest request) {
+
+        // Rolü değiştirilecek kullanıcı bulunur.
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new BusinessException(ErrorType.NOT_FOUND, "User not found"));
+
+        // Request'ten gelen roleName'e göre Role entity bulunur.
+        Role role = roleRepository.findByName(request.roleName())
+                .orElseThrow(() -> new BusinessException(ErrorType.NOT_FOUND, "Role not found"));
+
+        // Kullanıcının rolü güncellenir.
+        user.setRole(role);
+
+        // Güncellenmiş kullanıcı kaydedilir.
+        userRepository.save(user);
     }
 
 }

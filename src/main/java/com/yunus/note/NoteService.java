@@ -92,7 +92,11 @@ public class NoteService {
     @Transactional
     public NoteResponse update(UUID id, NoteUpdateRequest request) {
         Note note = findNoteById(id);
+        User currentUser = getCurrentUser();
 
+        if (!note.getCreatedBy().getId().equals(currentUser.getId())) {
+            throw new BusinessException(ErrorType.ACCESS_DENIED,"Bu notu güncelleme yetkiniz yok.");
+        }
         note.setContent(request.content());
 
         Note updatedNote = noteRepository.save(note);
@@ -103,7 +107,11 @@ public class NoteService {
     @Transactional
     public void delete(UUID id) {
         Note note = findNoteById(id);
+        User currentUser = getCurrentUser();
 
+        if (!note.getCreatedBy().getId().equals(currentUser.getId())) {
+            throw new BusinessException(ErrorType.ACCESS_DENIED, "Bu notu silme yetkiniz yok.");
+        }
         noteRepository.delete(note);
     }
 

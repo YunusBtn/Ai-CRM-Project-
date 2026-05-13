@@ -4,7 +4,6 @@ import com.yunus.auth.entity.User;
 import com.yunus.common.PageResponse;
 import com.yunus.conversation.Conversation;
 import com.yunus.conversation.ConversationRepository;
-import com.yunus.conversation.ConversationService;
 import com.yunus.enums.MessageDirection;
 import com.yunus.enums.SenderType;
 import com.yunus.exception.BusinessException;
@@ -13,7 +12,6 @@ import com.yunus.message.dto.MessageCreateRequest;
 import com.yunus.message.dto.MessageResponse;
 import com.yunus.security.UserPrincipal;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
@@ -48,24 +46,41 @@ public class MessageService {
             message.setSenderUser(currentUser);
         }
 
+
         Message savedMessage = messageRepository.save(message);
         conversation.setLastMessageAt(savedMessage.getSentAt());
 
         conversationRepository.save(conversation);
-
 
         return messageMapper.toResponse(savedMessage);
     }
 
     //Message GetByConversationId
     @Transactional(readOnly = true)
-    public PageResponse<MessageResponse> getByConversationId(UUID conversationId, Pageable pageable) {
+    public PageResponse<MessageResponse> getByConversationId(UUID conversationId, String search, Pageable pageable) {
 
         findActiveConversationById(conversationId);
 
-        Page<MessageResponse> messagePage = messageRepository.findAllByConversationId(conversationId, pageable)
+        Page<Message> messagePage;
+
+        if (search != null && !search.trim().isEmpty()) {
+            messagePage = messageRepository
+                    .findAllByConversationIdAndContentContainingIgnoreCase(
+                            conversationId,
+                            search.trim(),
+                            pageable
+                    );
+        } else {
+            messagePage = messageRepository
+                    .findAllByConversationId(
+                            conversationId,
+                            pageable
+                    );
+        }
+        Page<MessageResponse> responsePage = messagePage
                 .map(messageMapper::toResponse);
-        return PageResponse.from(messagePage);
+
+        return PageResponse.from(responsePage);
     }
 
 

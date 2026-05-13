@@ -6,11 +6,9 @@ import jakarta.validation.constraints.Size;
 
 public record CustomerCreateRequest(
 
-        @NotBlank(message = "First name is required")
         @Size(min = 2, message = "First name must be at least 2 characters long")
         String firstName,
 
-        @NotBlank(message = "Last name is required")
         @Size(min = 2, message = "Last name must be at least 2 characters long")
         String lastName,
 

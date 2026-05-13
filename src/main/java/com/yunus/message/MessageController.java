@@ -36,8 +36,9 @@ public class MessageController {
     @Operation(summary = "Get messages by conversation ID")
     public PageResponse<MessageResponse> getByConversationId(
             @PathVariable UUID conversationId,
-            @PageableDefault(size = 10, sort = "sendAt") Pageable pageable) {
-        return messageService.getByConversationId(conversationId, pageable);
+            @RequestParam(required = false) String search,
+            @PageableDefault(size = 10, sort = "sentAt") Pageable pageable) {
+        return messageService.getByConversationId(conversationId, search, pageable);
 
     }
 

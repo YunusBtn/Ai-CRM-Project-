@@ -9,14 +9,20 @@ import com.yunus.conversation.dto.ConversationResponse;
 import com.yunus.conversation.dto.ConversationStatusUpdateRequest;
 import com.yunus.customer.Customer;
 import com.yunus.customer.CustomerRepository;
+import com.yunus.enums.ConversationStatus;
+import com.yunus.enums.MessageDirection;
 import com.yunus.exception.BusinessException;
 import com.yunus.exception.ErrorType;
+import com.yunus.security.UserPrincipal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -36,7 +42,7 @@ public class ConversationService {
         Customer customer = findActiveCustomerById(customerId);
         Conversation conversation = conversationMapper.toEntity(request);
         conversation.setCustomer(customer);
-
+        conversation.setStatus(ConversationStatus.OPEN);
 
         if (request.assignedToId() != null) {
             User assignedUser = findActiveById(request.assignedToId());
@@ -106,11 +112,79 @@ public class ConversationService {
 
     //Conversation GetAll
     @Transactional(readOnly = true)
-    public PageResponse<ConversationResponse> getAll(Pageable pageable) {
-        Page<ConversationResponse> conversationPage = conversationRepository.findAllByIsDeletedFalse(pageable)
+    public PageResponse<ConversationResponse> getAll(
+            ConversationStatus status,
+            UUID customerId,
+            UUID assignedToId,
+            boolean unassigned,
+            Pageable pageable) {
+
+        Specification<Conversation> specification = Specification
+                .where(ConversationSpecification.isDeletedFalse())
+                .and(ConversationSpecification.hasStatus(status))
+                .and(ConversationSpecification.belongsToCustomer(customerId))
+                .and(ConversationSpecification.assignedTo(assignedToId))
+                .and(ConversationSpecification.isUnassigned(unassigned));
+
+        Page<ConversationResponse> conversationPage = conversationRepository.findAll(specification, pageable)
                 .map(conversationMapper::toResponse);
         return PageResponse.from(conversationPage);
     }
+
+
+    @Transactional(readOnly = true)
+    public PageResponse<ConversationResponse> getMyConversations(Pageable pageable) {
+        UserPrincipal currentUser = (UserPrincipal) SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getPrincipal();
+
+
+        UUID currentUserId = currentUser.getUser().getId();
+
+        Page<ConversationResponse> conversationPage = conversationRepository
+                .findAllByAssignedToIdAndIsDeletedFalse(currentUserId, pageable)
+                .map(conversationMapper::toResponse);
+
+        return PageResponse.from(conversationPage);
+
+    }
+
+
+    @Transactional(readOnly = true)
+    public PageResponse<ConversationResponse> getUnassignedConversations(Pageable pageable) {
+        List<ConversationStatus> activeStatuses = List.of(
+                ConversationStatus.OPEN,
+                ConversationStatus.PENDING);
+
+
+        Page<ConversationResponse> conversationPage = conversationRepository
+                .findAllByAssignedToIsNullAndStatusInAndIsDeletedFalse(activeStatuses, pageable)
+                .map(conversationMapper::toResponse);
+        return PageResponse.from(conversationPage);
+
+    }
+
+
+    public PageResponse<ConversationResponse> getWaitingReplyConversations(Pageable pageable) {
+
+        List<ConversationStatus> activeStatuses = List.of(
+                ConversationStatus.PENDING,
+                ConversationStatus.OPEN
+        );
+
+        Page<ConversationResponse> conversationPage = conversationRepository
+                .findWaitingConversations(
+                        activeStatuses,
+                        MessageDirection.INBOUND,
+                        pageable
+                )
+                .map(conversationMapper::toResponse);
+        return PageResponse.from(conversationPage);
+
+
+    }
+
 
     private Conversation findActiveConversationById(UUID id) {
         return conversationRepository.findByIdAndIsDeletedFalse(id)

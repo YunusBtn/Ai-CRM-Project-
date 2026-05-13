@@ -9,11 +9,10 @@ public record NoteResponse(
         UUID customerId,
         String content,
         UUID conversationId,
-        UUID createdId,
+        UUID createdById,
         String createdByFullName,
         LocalDateTime createdAt,
         LocalDateTime updatedAt
-
 
 ) {
 }

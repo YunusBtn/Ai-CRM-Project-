@@ -21,6 +21,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class Message extends BaseEntity {
 
+    @Column(nullable = false)
     private String content;
 
     @Enumerated(EnumType.STRING)

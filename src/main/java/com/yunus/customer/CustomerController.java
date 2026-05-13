@@ -4,6 +4,7 @@ import com.yunus.common.PageResponse;
 import com.yunus.customer.dto.CustomerCreateRequest;
 import com.yunus.customer.dto.CustomerResponse;
 import com.yunus.customer.dto.CustomerUpdateRequest;
+import com.yunus.enums.CustomerStatus;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -36,11 +37,16 @@ public class CustomerController {
         return customerService.getCustomerById(id);
     }
 
-    @Operation(summary = "Get ALL Customers with pagination")
+
+
+    @Operation(summary = "Get ALL Customers with pagination and specification")
     @GetMapping("/all")
     public PageResponse<CustomerResponse> getAllCustomers(
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) CustomerStatus status,
+            @RequestParam(required = false)  UUID tagId,
             @PageableDefault(size = 10, sort = "createdAt") Pageable pageable) {
-        return customerService.getAllCustomers(pageable);
+        return customerService.getAllCustomers(search,status,tagId,pageable);
     }
 
 

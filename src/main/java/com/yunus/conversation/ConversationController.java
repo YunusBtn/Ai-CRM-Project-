@@ -5,6 +5,7 @@ import com.yunus.conversation.dto.ConversationAssignRequest;
 import com.yunus.conversation.dto.ConversationCreateRequest;
 import com.yunus.conversation.dto.ConversationResponse;
 import com.yunus.conversation.dto.ConversationStatusUpdateRequest;
+import com.yunus.enums.ConversationStatus;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -47,13 +48,24 @@ public class ConversationController {
 
     @Operation(summary = "Get all conversations")
     @GetMapping("/all")
-    public PageResponse<ConversationResponse> getAll(Pageable pageable) {
-        return conversationService.getAll(pageable);
+    public PageResponse<ConversationResponse> getAll(
+            @RequestParam(required = false) ConversationStatus status,
+            @RequestParam(required = false) UUID customerId,
+            @RequestParam(required = false) UUID assignedToId,
+            @RequestParam(required = false) boolean unassigned,
+            Pageable pageable) {
+
+        return conversationService.getAll(
+                status,
+                assignedToId,
+                customerId,
+                unassigned,
+                pageable);
     }
 
     @GetMapping("/getConversation/{id}")
     @Operation(summary = "Get a conversation by ID")
-    public ConversationResponse getById(UUID id) {
+    public ConversationResponse getById(@PathVariable UUID id) {
         return conversationService.getById(id);
     }
 
@@ -81,5 +93,23 @@ public class ConversationController {
         return conversationService.assign(id, request);
     }
 
+    @GetMapping("/my")
+    @Operation(summary = "Get my conversations")
+    public PageResponse<ConversationResponse> getMyConversations(Pageable pageable) {
+        return conversationService.getMyConversations(pageable);
+    }
+
+
+    @GetMapping("/unassigned")
+    @Operation(summary = "Get unassigned conversations")
+    public PageResponse<ConversationResponse> getUnassignedConversations(Pageable pageable) {
+        return conversationService.getUnassignedConversations(pageable);
+    }
+
+    @GetMapping("/waitingReply")
+    @Operation(summary = "Get waiting reply conversations")
+    public PageResponse<ConversationResponse> getWaitingReplyConversations(Pageable pageable) {
+        return conversationService.getWaitingReplyConversations(pageable);
+    }
 
 }

@@ -9,6 +9,6 @@ public record TagResponse(
         String name,
         String color,
         LocalDateTime createdAt,
-        LocalDateTime uptadedAt
+        LocalDateTime updatedAt
 
 ) {}

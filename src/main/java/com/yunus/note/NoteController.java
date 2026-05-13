@@ -18,13 +18,14 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 @Tag(name = "Notes", description = "Note management endpoints")
+@RequestMapping("/api/notes")
 public class NoteController {
 
     private final NoteService noteService;
 
     @Operation(summary = "Create note for customer")
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/api/customers/{customerId}/notes")
+    @PostMapping("create/{customerId}")
     public NoteResponse createCustomerNote(
             @PathVariable UUID customerId,
             @Valid @RequestBody NoteCreateRequest request
@@ -33,7 +34,7 @@ public class NoteController {
     }
 
     @Operation(summary = "Get notes by customer id")
-    @GetMapping("/api/customers/{customerId}/notes")
+    @GetMapping("{customerId}")
     public PageResponse<NoteResponse> getByCustomerId(
             @PathVariable UUID customerId,
             @PageableDefault(size = 10, sort = "createdAt") Pageable pageable
@@ -43,7 +44,7 @@ public class NoteController {
 
     @Operation(summary = "Create note for conversation")
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/api/conversations/{conversationId}/notes")
+    @PostMapping("conversationCreate/{conversationId}")
     public NoteResponse createConversationNote(
             @PathVariable UUID conversationId,
             @Valid @RequestBody NoteCreateRequest request
@@ -52,7 +53,7 @@ public class NoteController {
     }
 
     @Operation(summary = "Get notes by conversation id")
-    @GetMapping("/api/conversations/{conversationId}/notes")
+    @GetMapping("getConversation/{conversationId}")
     public PageResponse<NoteResponse> getByConversationId(
             @PathVariable UUID conversationId,
             @PageableDefault(size = 10, sort = "createdAt") Pageable pageable
@@ -61,13 +62,13 @@ public class NoteController {
     }
 
     @Operation(summary = "Get note by id")
-    @GetMapping("/api/notes/{id}")
+    @GetMapping("get/{id}")
     public NoteResponse getById(@PathVariable UUID id) {
         return noteService.getById(id);
     }
 
     @Operation(summary = "Update note")
-    @PutMapping("/api/notes/{id}")
+    @PutMapping("update/{id}")
     public NoteResponse update(
             @PathVariable UUID id,
             @Valid @RequestBody NoteUpdateRequest request
@@ -77,7 +78,7 @@ public class NoteController {
 
     @Operation(summary = "Delete note by id")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @DeleteMapping("/api/notes/{id}")
+    @DeleteMapping("delete/{id}")
     public void delete(@PathVariable UUID id) {
         noteService.delete(id);
     }

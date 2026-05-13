@@ -8,7 +8,7 @@ import java.util.UUID;
 public record ConversationResponse(
 
         UUID id,
-        String tittle,
+        String title,
         ConversationStatus status,
         UUID customerId,
         String customerFullName,

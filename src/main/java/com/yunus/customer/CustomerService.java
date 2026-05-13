@@ -4,6 +4,7 @@ import com.yunus.common.PageResponse;
 import com.yunus.customer.dto.CustomerCreateRequest;
 import com.yunus.customer.dto.CustomerResponse;
 import com.yunus.customer.dto.CustomerUpdateRequest;
+import com.yunus.enums.CustomerStatus;
 import com.yunus.tag.Tag;
 import com.yunus.exception.BusinessException;
 import com.yunus.exception.ErrorType;
@@ -11,6 +12,7 @@ import com.yunus.tag.TagRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -55,8 +57,20 @@ public class CustomerService {
 
     //Customer getAll with pagination
     @Transactional(readOnly = true)
-    public PageResponse<CustomerResponse> getAllCustomers(Pageable pageable) {
-        Page<CustomerResponse> customerPage = customerRepository.findAllByIsDeletedFalse(pageable)
+    public PageResponse<CustomerResponse> getAllCustomers(
+            String search,
+            CustomerStatus status,
+            UUID tagId,
+            Pageable pageable) {
+
+        Specification<Customer> specification = Specification
+                .where(CustomerSpecification.isNotDeleted())
+                .and(CustomerSpecification.containsSearch(search))
+                .and(CustomerSpecification.hasStatus(status))
+                .and(CustomerSpecification.hasTag(tagId));
+
+
+        Page<CustomerResponse> customerPage = customerRepository.findAll(specification,pageable)
                 .map(customerMapper::toResponse);
         return PageResponse.from(customerPage);
     }
