@@ -139,11 +139,17 @@ public class ConversationService {
                 .getAuthentication()
                 .getPrincipal();
 
-
         UUID currentUserId = currentUser.getUser().getId();
 
+        List<ConversationStatus> activeStatuses = List.of(
+                ConversationStatus.OPEN,
+                ConversationStatus.PENDING);
+
         Page<ConversationResponse> conversationPage = conversationRepository
-                .findAllByAssignedToIdAndIsDeletedFalse(currentUserId, pageable)
+                .findAllByAssignedToIdAndStatusInAndIsDeletedFalse(
+                        currentUserId,
+                        activeStatuses,
+                        pageable)
                 .map(conversationMapper::toResponse);
 
         return PageResponse.from(conversationPage);
@@ -166,6 +172,7 @@ public class ConversationService {
     }
 
 
+    @Transactional(readOnly = true)
     public PageResponse<ConversationResponse> getWaitingReplyConversations(Pageable pageable) {
 
         List<ConversationStatus> activeStatuses = List.of(

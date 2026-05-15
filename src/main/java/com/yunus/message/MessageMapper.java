@@ -12,6 +12,7 @@ public interface MessageMapper {
     @Mapping(target = "conversation", ignore = true)
     @Mapping(target = "senderUser", ignore = true)
     @Mapping(target = "sentAt", ignore = true)
+    @Mapping(target = "direction", source = "messageDirection")
     Message toEntity(MessageCreateRequest request);
 
     @Mapping(target = "conversationId", source = "conversation.id")

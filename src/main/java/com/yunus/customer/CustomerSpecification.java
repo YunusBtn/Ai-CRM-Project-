@@ -1,6 +1,11 @@
 package com.yunus.customer;
 
 import com.yunus.enums.CustomerStatus;
+import com.yunus.tag.Tag;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.Expression;
+import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.Path;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -32,7 +37,12 @@ public class CustomerSpecification {
                 return cb.conjunction();
             }
             query.distinct(true);
-            return cb.equal(root.join("tags").get("id"), tagId);
+            Join<Customer, Tag> tagJoin = root.join("tags");
+            return cb.and(
+                    cb.equal(tagJoin.get("id"), tagId),
+                    cb.isFalse(tagJoin.get("isDeleted"))
+            );
+
         };
     }
 
@@ -44,12 +54,17 @@ public class CustomerSpecification {
             }
             String keyword = "%" + search.toLowerCase().trim() + "%";
             return cb.or(
-                    cb.like(cb.lower(root.get("firstName")), keyword),
-                    cb.like(cb.lower(root.get("lastName")), keyword),
-                    cb.like(cb.lower(root.get("email")), keyword),
-                    cb.like(cb.lower(root.get("phone")), keyword));
+                    cb.like(safeLower(cb, root.get("firstName")), keyword),
+                    cb.like(safeLower(cb, root.get("lastName")), keyword),
+                    cb.like(safeLower(cb, root.get("email")), keyword),
+                    cb.like(safeLower(cb, root.get("phone")), keyword));
         };
     }
 
-
+    private static Expression<String> safeLower(
+            CriteriaBuilder cb,
+            Path<String> path
+    ) {
+        return cb.lower(cb.coalesce(path, ""));
+    }
 }

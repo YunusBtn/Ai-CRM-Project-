@@ -9,8 +9,8 @@ public record DashboardSummaryResponse(
         long pendingConversationCount,
         long waitingReplyConversationCount,
         long todayInboundMessageCount,
-        long todayClosedConversationCount,
         long unassignedConversationCount,
+        long todayClosedConversationCount,
         long myAssignedOpenConversationCount
 
 ) {

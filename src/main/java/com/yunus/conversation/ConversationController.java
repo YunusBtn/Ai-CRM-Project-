@@ -50,8 +50,8 @@ public class ConversationController {
     @GetMapping("/all")
     public PageResponse<ConversationResponse> getAll(
             @RequestParam(required = false) ConversationStatus status,
-            @RequestParam(required = false) UUID customerId,
             @RequestParam(required = false) UUID assignedToId,
+            @RequestParam(required = false) UUID customerId,
             @RequestParam(required = false) boolean unassigned,
             Pageable pageable) {
 

@@ -17,7 +17,7 @@ public record CustomerResponse(
         CustomerStatus status,
         Set<TagResponse> tags,
         LocalDateTime createdAt,
-        LocalDateTime uptadedAt
+        LocalDateTime updatedAt
 
 
 ) { }

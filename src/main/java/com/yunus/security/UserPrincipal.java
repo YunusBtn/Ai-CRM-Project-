@@ -1,5 +1,4 @@
 package com.yunus.security;
-
 import com.yunus.auth.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -8,11 +7,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.UUID;
 
 @RequiredArgsConstructor
 public class UserPrincipal implements UserDetails {
-
     private final User user;
 
     @Override
@@ -21,7 +18,6 @@ public class UserPrincipal implements UserDetails {
             return List.of();
         }
         return List.of(new SimpleGrantedAuthority("ROLE_" + user.getRole().getName().name()));
-
     }
 
     @Override

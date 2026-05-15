@@ -8,7 +8,7 @@ import jakarta.validation.constraints.Size;
 
 public record MessageCreateRequest(
         @NotBlank(message = "Content is required")
-        @NotNull(message = "Conversation id is required")
+        @NotNull(message = "Message is required")
         @Size(min = 1,max = 5200, message = "Content must be at least 1 character long")
         String content,
 

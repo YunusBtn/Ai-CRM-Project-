@@ -31,3 +31,12 @@ build/
 
 ### VS Code ###
 .vscode/
+
+.env
+.env.*
+
+logs/
+*.log
+
+postgres-data/
+ai-crm-postgres-data/

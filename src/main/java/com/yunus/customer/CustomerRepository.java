@@ -29,7 +29,7 @@ public interface CustomerRepository extends JpaRepository<Customer, UUID>, JpaSp
 
     long countByStatusAndIsDeletedFalse(CustomerStatus status);
 
-    long countByCreatedAtBetweenAndIsDeletedFalse(LocalDateTime strat, LocalDateTime end);
+    long countByCreatedAtBetweenAndIsDeletedFalse(LocalDateTime start, LocalDateTime end);
 
     @Query("""
             SELECT new com.yunus.dashboard.dto.TagCustomerCountResponse(

@@ -24,7 +24,7 @@ public interface ConversationRepository extends JpaRepository<Conversation, UUID
 
     Page<Conversation> findAllByCustomerIdAndIsDeletedFalse(UUID customerId, Pageable pageable);
 
-    Page<Conversation> findAllByAssignedToIdAndIsDeletedFalse(UUID assignedToId, Pageable pageable);
+    Page<Conversation> findAllByAssignedToIdAndStatusInAndIsDeletedFalse(UUID assignedToId,List<ConversationStatus> statuses,  Pageable pageable);
 
     Page<Conversation> findAllByIsDeletedFalse(Pageable pageable);
 
