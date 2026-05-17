@@ -10,7 +10,10 @@ public enum ErrorType {
     VALIDATION_ERROR("Geçersiz veri", HttpStatus.BAD_REQUEST),
     DUPLICATE_ENTRY("Kayıt zaten mevcut", HttpStatus.CONFLICT),
     ACCESS_DENIED("Yetki yok", HttpStatus.FORBIDDEN),
-    INTERNAL_ERROR("Sistem hatası", HttpStatus.INTERNAL_SERVER_ERROR);
+    INTERNAL_ERROR("Sistem hatası", HttpStatus.INTERNAL_SERVER_ERROR),
+    AI_PROVIDER_ERROR("Ai Servisi Şuan Kullanılamıyor", HttpStatus.SERVICE_UNAVAILABLE),
+    AI_TIMEOUT("Ai servisinden zamanında cevap alınamadı", HttpStatus.REQUEST_TIMEOUT),
+    AI_INVALID_RESPONSE("Ai dan geçersiz cevap alındı",HttpStatus.BAD_REQUEST);
 
 
     private final String message;
