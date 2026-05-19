@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Repository
@@ -17,4 +18,6 @@ public interface MessageRepository extends JpaRepository<Message, UUID> {
     Page<Message> findAllByConversationIdAndContentContainingIgnoreCase(UUID conversationId, String content, Pageable pageable);
 
     long countByDirectionAndSentAtBetween(MessageDirection direction, LocalDateTime start, LocalDateTime end);
+
+    List<Message> findByConversationIdOrderBySentAtDesc(UUID conversationId, Pageable pageable);
 }
