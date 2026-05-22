@@ -1,7 +1,7 @@
 package com.yunus.ai.dto;
 
-import com.yunus.enums.AiResultStatus;
-import com.yunus.enums.AiResultType;
+import com.yunus.ai.enums.AiResultStatus;
+import com.yunus.ai.enums.AiResultType;
 
 import java.time.LocalDateTime;
 import java.util.UUID;

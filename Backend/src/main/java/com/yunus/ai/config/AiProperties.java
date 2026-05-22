@@ -1,4 +1,4 @@
-package com.yunus.ai;
+package com.yunus.ai.config;
 
 import lombok.Getter;
 import lombok.Setter;

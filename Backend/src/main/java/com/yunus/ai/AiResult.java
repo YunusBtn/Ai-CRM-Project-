@@ -1,7 +1,7 @@
 package com.yunus.ai;
 
-import com.yunus.enums.AiResultStatus;
-import com.yunus.enums.AiResultType;
+import com.yunus.ai.enums.AiResultStatus;
+import com.yunus.ai.enums.AiResultType;
 import com.yunus.auth.entity.User;
 import com.yunus.common.BaseEntity;
 import com.yunus.conversation.Conversation;

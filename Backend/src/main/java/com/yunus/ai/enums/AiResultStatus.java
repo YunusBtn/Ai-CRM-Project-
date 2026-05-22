@@ -1,4 +1,4 @@
-package com.yunus.enums;
+package com.yunus.ai.enums;
 
 public enum AiResultStatus {
 

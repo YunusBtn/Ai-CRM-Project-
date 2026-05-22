@@ -1,6 +1,5 @@
 package com.yunus.ai.config;
 
-import com.yunus.ai.AiProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.web.client.ClientHttpRequestFactories;
 import org.springframework.boot.web.client.ClientHttpRequestFactorySettings;

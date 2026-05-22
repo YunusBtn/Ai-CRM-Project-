@@ -1,5 +1,6 @@
 package com.yunus.ai;
 
+import com.yunus.ai.config.AiProperties;
 import com.yunus.ai.dto.AiContextMessage;
 import com.yunus.ai.dto.AiConversationContext;
 import com.yunus.conversation.Conversation;

@@ -1,7 +1,8 @@
-package com.yunus.ai;
+package com.yunus.ai.repository;
 
-import com.yunus.enums.AiResultStatus;
-import com.yunus.enums.AiResultType;
+import com.yunus.ai.AiResult;
+import com.yunus.ai.enums.AiResultStatus;
+import com.yunus.ai.enums.AiResultType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -2,7 +2,6 @@ package com.yunus.ai.provider;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.yunus.ai.AiProperties;
 import com.yunus.ai.provider.dto.AiProviderRequest;
 import com.yunus.ai.provider.dto.AiProviderResponse;
 import com.yunus.exception.BusinessException;
