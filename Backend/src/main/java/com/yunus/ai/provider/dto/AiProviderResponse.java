@@ -1,4 +1,4 @@
-package com.yunus.ai.dto;
+package com.yunus.ai.provider.dto;
 
 public record AiProviderResponse(
 
