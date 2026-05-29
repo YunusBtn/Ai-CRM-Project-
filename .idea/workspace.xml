@@ -1,17 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="01d5ba4d-ea01-4caf-b4f8-330de8b028c3" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/com/yunus/ai/dto/AiProvider.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/com/yunus/ai/dto/AiProviderRequest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/com/yunus/ai/dto/AiProviderResponse.java" beforeDir="false" />
-    </list>
+    <list default="true" id="01d5ba4d-ea01-4caf-b4f8-330de8b028c3" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="EmbeddingIndexingInfo">
+    <option name="cachedIndexableFilesCount" value="337" />
     <option name="fileBasedEmbeddingIndicesEnabled" value="true" />
   </component>
   <component name="Git.Settings">
@@ -35,6 +32,7 @@
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.MCP Project settings loaded": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
     "RunOnceActivity.typescript.service.memoryLimit.init": "true",
     "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
     "git-widget-placeholder": "main",
@@ -62,6 +60,7 @@
       <updated>1778925057913</updated>
       <workItem from="1778925059219" duration="1000" />
       <workItem from="1779474168054" duration="23000" />
+      <workItem from="1779991082904" duration="9000" />
     </task>
     <servers />
   </component>
