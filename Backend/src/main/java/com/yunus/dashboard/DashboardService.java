@@ -45,16 +45,16 @@ public class DashboardService {
         UUID currentUserId = getCurrentUserId();
 
         return new DashboardSummaryResponse(
-                customerRepository.countByIsDeletedFalse(),
-                customerRepository.countByStatusAndIsDeletedFalse(CustomerStatus.ACTIVE),
-                customerRepository.countByCreatedAtBetweenAndIsDeletedFalse(todayStart, tomorrowStart),
-                conversationRepository.countByStatusAndIsDeletedFalse(ConversationStatus.OPEN),
-                conversationRepository.countByStatusAndIsDeletedFalse(ConversationStatus.PENDING),
+                customerRepository.count(),
+                customerRepository.countByStatus(CustomerStatus.ACTIVE),
+                customerRepository.countByCreatedAtBetween(todayStart, tomorrowStart),
+                conversationRepository.countByStatus(ConversationStatus.OPEN),
+                conversationRepository.countByStatus(ConversationStatus.PENDING),
                 conversationRepository.countWaitingConversations(activeStatuses, MessageDirection.INBOUND),
                 messageRepository.countByDirectionAndSentAtBetween(MessageDirection.INBOUND, todayStart, tomorrowStart),
-                conversationRepository.countByAssignedToIsNullAndStatusInAndIsDeletedFalse(activeStatuses),
-                conversationRepository.countByStatusAndUpdatedAtBetweenAndIsDeletedFalse(ConversationStatus.CLOSED, todayStart, tomorrowStart),
-                conversationRepository.countByAssignedToIdAndStatusAndIsDeletedFalse(currentUserId, ConversationStatus.OPEN)
+                conversationRepository.countByAssignedToIsNullAndStatusIn(activeStatuses),
+                conversationRepository.countByStatusAndUpdatedAtBetween(ConversationStatus.CLOSED, todayStart, tomorrowStart),
+                conversationRepository.countByAssignedToIdAndStatus(currentUserId, ConversationStatus.OPEN)
         );
     }
 

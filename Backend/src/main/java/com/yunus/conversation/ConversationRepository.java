@@ -20,13 +20,13 @@ import java.util.UUID;
 public interface ConversationRepository extends JpaRepository<Conversation, UUID>, JpaSpecificationExecutor<Conversation> {
 
 
-    Optional<Conversation> findByIdAndIsDeletedFalse(UUID id);
+    Optional<Conversation> findById(UUID id);
 
-    Page<Conversation> findAllByCustomerIdAndIsDeletedFalse(UUID customerId, Pageable pageable);
+    Page<Conversation> findAllByCustomerId(UUID customerId, Pageable pageable);
 
-    Page<Conversation> findAllByAssignedToIdAndStatusInAndIsDeletedFalse(UUID assignedToId,List<ConversationStatus> statuses,  Pageable pageable);
+    Page<Conversation> findAllByAssignedToIdAndStatusIn(UUID assignedToId,List<ConversationStatus> statuses,  Pageable pageable);
 
-    Page<Conversation> findAllByAssignedToIsNullAndStatusInAndIsDeletedFalse(List<ConversationStatus> status, Pageable pageable);
+    Page<Conversation> findAllByAssignedToIsNullAndStatusIn(List<ConversationStatus> status, Pageable pageable);
 
     @Query(
             value = """
@@ -58,13 +58,13 @@ public interface ConversationRepository extends JpaRepository<Conversation, UUID
             Pageable pageable);
 
 
-    long countByStatusAndIsDeletedFalse(ConversationStatus status);
+    long countByStatus(ConversationStatus status);
 
-    long countByAssignedToIsNullAndStatusInAndIsDeletedFalse(List<ConversationStatus> status);
+    long countByAssignedToIsNullAndStatusIn(List<ConversationStatus> status);
 
-    long countByAssignedToIdAndStatusAndIsDeletedFalse(UUID assignedToId,ConversationStatus status);
+    long countByAssignedToIdAndStatus(UUID assignedToId,ConversationStatus status);
 
-    long countByStatusAndUpdatedAtBetweenAndIsDeletedFalse(ConversationStatus status, LocalDateTime start, LocalDateTime end);
+    long countByStatusAndUpdatedAtBetween(ConversationStatus status, LocalDateTime start, LocalDateTime end);
 
     @Query("""
             SELECT new com.yunus.dashboard.dto.ConversationStatusCountResponse(

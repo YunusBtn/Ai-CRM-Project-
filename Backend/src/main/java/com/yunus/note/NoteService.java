@@ -121,12 +121,12 @@ public class NoteService {
     }
 
     private Customer findActiveCustomerById(UUID id) {
-        return customerRepository.findByIdAndIsDeletedFalse(id)
+        return customerRepository.findById(id)
                 .orElseThrow(() -> new BusinessException(ErrorType.NOT_FOUND, "Customer not found"));
     }
 
     private Conversation findActiveConversationById(UUID id) {
-        return conversationRepository.findByIdAndIsDeletedFalse(id)
+        return conversationRepository.findById(id)
                 .orElseThrow(() -> new BusinessException(ErrorType.NOT_FOUND, "Conversation not found"));
     }
 

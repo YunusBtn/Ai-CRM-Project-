@@ -1,5 +1,6 @@
 package com.yunus.auth;
 
+import com.yunus.common.ApiResponse;
 import com.yunus.auth.dto.UserRoleUpdateRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -17,10 +18,11 @@ public class AdminUserController {
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PatchMapping("/{userId}/role")
-    public void updateUserRole(
+    public ApiResponse<Void> updateUserRole(
             @PathVariable UUID userId,
             @Valid @RequestBody UserRoleUpdateRequest request
     ) {
         authService.updateUserRole(userId, request);
+        return ApiResponse.success(null, "Kullanıcı rolü başarıyla güncellendi");
     }
 }

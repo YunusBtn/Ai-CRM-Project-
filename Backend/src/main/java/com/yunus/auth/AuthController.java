@@ -25,16 +25,16 @@ public class AuthController {
     @ApiResponse(description = "User registered successfully", responseCode = "200")
     @ApiResponse(description = "User already exists", responseCode = "409")
     @PostMapping("/register")
-    public AuthResponse register(@RequestBody @Valid RegisterRequest request) {
-        return authService.register(request);
+    public com.yunus.common.ApiResponse<AuthResponse> register(@RequestBody @Valid RegisterRequest request) {
+        return com.yunus.common.ApiResponse.success(authService.register(request));
     }
 
     @ApiResponse(description = "User logged in successfully", responseCode = "200")
     @ApiResponse(description = "Invalid credentials", responseCode = "401")
     @Operation(summary = "Login a user")
     @PostMapping("/login")
-    public AuthResponse login(@RequestBody @Valid LoginRequest request) {
-        return authService.login(request);
+    public com.yunus.common.ApiResponse<AuthResponse> login(@RequestBody @Valid LoginRequest request) {
+        return com.yunus.common.ApiResponse.success(authService.login(request));
     }
 
 

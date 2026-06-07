@@ -1,5 +1,6 @@
 package com.yunus.tag;
 
+import com.yunus.common.ApiResponse;
 import com.yunus.common.PageResponse;
 import com.yunus.tag.dto.TagCreateRequest;
 import com.yunus.tag.dto.TagResponse;
@@ -27,37 +28,36 @@ public class TagController {
     @PostMapping("/create")
     @Operation(summary = "Create a new tag")
     @ResponseStatus(HttpStatus.CREATED)
-    public TagResponse createTag(@RequestBody @Valid TagCreateRequest request) {
-        return tagService.createTag(request);
+    public ApiResponse<TagResponse> createTag(@RequestBody @Valid TagCreateRequest request) {
+        return ApiResponse.success(tagService.createTag(request));
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "Get a tag by ID")
-    public TagResponse getById(@PathVariable UUID id) {
-
-        return tagService.getTagById(id);
-
+    public ApiResponse<TagResponse> getById(@PathVariable UUID id) {
+        return ApiResponse.success(tagService.getTagById(id));
     }
 
     @GetMapping("/all")
     @Operation(summary = "Get all tags")
-    public PageResponse<TagResponse> getAllTags(
+    public ApiResponse<PageResponse<TagResponse>> getAllTags(
             @PageableDefault(size = 10, sort = "createdAt") Pageable pageable) {
-        return tagService.getAllTags(pageable);
+        return ApiResponse.success(tagService.getAllTags(pageable));
     }
 
     @PutMapping("/{id}")
     @Operation(summary = "Update a tag by ID")
-    public TagResponse updateTag(@PathVariable UUID id, @RequestBody @Valid TagUpdateRequest request) {
-        return tagService.updateTag(id, request);
+    public ApiResponse<TagResponse> updateTag(@PathVariable UUID id, @RequestBody @Valid TagUpdateRequest request) {
+        return ApiResponse.success(tagService.updateTag(id, request));
     }
 
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete a tag by ID")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteTag(@PathVariable UUID id) {
+    public ApiResponse<Void> deleteTag(@PathVariable UUID id) {
         tagService.deleteTag(id);
+        return ApiResponse.success(null, "Etiket başarıyla silindi");
     }
 
 

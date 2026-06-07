@@ -85,7 +85,7 @@ public class MessageService {
 
 
     private Conversation findActiveConversationById(UUID id) {
-        return conversationRepository.findByIdAndIsDeletedFalse(id)
+        return conversationRepository.findById(id)
                 .orElseThrow(() -> new BusinessException(ErrorType.NOT_FOUND, "Conversation not found"));
     }
 

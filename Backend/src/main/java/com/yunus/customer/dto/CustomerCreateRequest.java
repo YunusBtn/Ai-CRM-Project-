@@ -1,9 +1,11 @@
 package com.yunus.customer.dto;
 
+import com.yunus.common.validation.ValidContactInfo;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
+@ValidContactInfo
 public record CustomerCreateRequest(
 
         @Size(min = 2, message = "First name must be at least 2 characters long")

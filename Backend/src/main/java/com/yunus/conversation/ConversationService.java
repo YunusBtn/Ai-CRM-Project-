@@ -76,7 +76,7 @@ public class ConversationService {
         findActiveCustomerById(customerId);
 
         Page<ConversationResponse> conversationPage =
-                conversationRepository.findAllByCustomerIdAndIsDeletedFalse(customerId, pageable)
+                conversationRepository.findAllByCustomerId(customerId, pageable)
                         .map(conversationMapper::toResponse);
 
         return PageResponse.from(conversationPage);
@@ -147,7 +147,7 @@ public class ConversationService {
 
 
         Page<ConversationResponse> conversationPage = conversationRepository
-                .findAllByAssignedToIdAndStatusInAndIsDeletedFalse(
+                .findAllByAssignedToIdAndStatusIn(
                         currentUserId,
                         ACTIVE_STATUSES,
                         pageable)
@@ -162,7 +162,7 @@ public class ConversationService {
 
 
         Page<ConversationResponse> conversationPage = conversationRepository
-                .findAllByAssignedToIsNullAndStatusInAndIsDeletedFalse(ACTIVE_STATUSES, pageable)
+                .findAllByAssignedToIsNullAndStatusIn(ACTIVE_STATUSES, pageable)
                 .map(conversationMapper::toResponse);
         return PageResponse.from(conversationPage);
 
@@ -191,17 +191,17 @@ public class ConversationService {
 
 
     private Conversation findActiveConversationById(UUID id) {
-        return conversationRepository.findByIdAndIsDeletedFalse(id)
+        return conversationRepository.findById(id)
                 .orElseThrow(() -> new BusinessException(ErrorType.NOT_FOUND, "Conversation not found"));
     }
 
     private Customer findActiveCustomerById(UUID id) {
-        return customerRepository.findByIdAndIsDeletedFalse(id)
+        return customerRepository.findById(id)
                 .orElseThrow(() -> new BusinessException(ErrorType.NOT_FOUND, "Customer not found"));
     }
 
     private User findActiveById(UUID id) {
-        return userRepository.findByIdAndIsDeletedFalseAndIsActiveTrue(id)
+        return userRepository.findByIdAndIsActiveTrue(id)
                 .orElseThrow(() -> new BusinessException(ErrorType.NOT_FOUND, "User not found"));
     }
 

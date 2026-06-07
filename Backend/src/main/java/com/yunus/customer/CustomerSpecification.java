@@ -18,7 +18,7 @@ public class CustomerSpecification {
     }
 
 
-    public static Specification<Customer> isNotDeleted() {
+    public static Specification<Customer> conjunction() {
         return (root, query, cb) -> cb.isFalse(root.get("isDeleted"));
     }
 

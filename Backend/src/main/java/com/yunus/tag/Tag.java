@@ -3,6 +3,7 @@ package com.yunus.tag;
 import com.yunus.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.SQLRestriction;
 
 @Getter
 @Setter
@@ -10,6 +11,7 @@ import lombok.*;
 @Table(name = "tags")
 @AllArgsConstructor
 @NoArgsConstructor
+@SQLRestriction("is_deleted = false")
 public class Tag extends BaseEntity {
 
     @Column(nullable = false, unique = true, length = 100)

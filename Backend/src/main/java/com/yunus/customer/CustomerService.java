@@ -10,16 +10,19 @@ import com.yunus.exception.BusinessException;
 import com.yunus.exception.ErrorType;
 import com.yunus.tag.TagRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class CustomerService {
 
     private final CustomerRepository customerRepository;
@@ -29,13 +32,13 @@ public class CustomerService {
     //Customer Create
     @Transactional
     public CustomerResponse createCustomer(CustomerCreateRequest request) {
-
-        validatePhoneOrEmailPresent(request.phone(), request.email());
         validateEmailIsUnique(request.email());
         validatePhoneIsUnique(request.phone());
 
         Customer customer = customerMapper.toEntity(request);
         Customer savedCustomer = customerRepository.save(customer);
+
+        log.info("Yeni müşteri oluşturuldu: {} {}", savedCustomer.getFirstName(), savedCustomer.getLastName());
 
         return customerMapper.toResponse(savedCustomer);
     }
@@ -53,6 +56,7 @@ public class CustomerService {
         Customer customer = findActiveCustomerById(id);
         customer.setDeleted(true);
         customerRepository.save(customer);
+        log.info("Müşteri silindi: {}", id);
     }
 
     //Customer getAll with pagination
@@ -64,7 +68,7 @@ public class CustomerService {
             Pageable pageable) {
 
         Specification<Customer> specification = Specification
-                .where(CustomerSpecification.isNotDeleted())
+                .where(CustomerSpecification.conjunction())
                 .and(CustomerSpecification.containsSearch(search))
                 .and(CustomerSpecification.hasStatus(status))
                 .and(CustomerSpecification.hasTag(tagId));
@@ -80,42 +84,41 @@ public class CustomerService {
     public CustomerResponse updateCustomer(UUID id, CustomerUpdateRequest request) {
 
         Customer customer = findActiveCustomerById(id);
-        if (request.firstName() != null && !request.firstName().isBlank()) {
+        if (StringUtils.hasText(request.firstName())) {
             customer.setFirstName(request.firstName());
         }
-        if (request.lastName() != null && !request.lastName().isBlank()) {
+        if (StringUtils.hasText(request.lastName())) {
             customer.setLastName(request.lastName());
         }
 
         if (request.phone() != null) {
-            String normalizedPhone = normalizeBlankToNull(request.phone());
-            if (hasText(normalizedPhone)
-                    && !request.phone().equals(customer.getPhone())
-                    && customerRepository.existsByPhoneAndIsDeletedFalse(request.phone())) {
-                throw new BusinessException(ErrorType.DUPLICATE_ENTRY, "Phone already exists");
+            String normalizedPhone = request.phone().trim();
+            if (StringUtils.hasText(normalizedPhone)
+                    && !normalizedPhone.equals(customer.getPhone())
+                    && customerRepository.existsByPhone(normalizedPhone)) {
+                throw new BusinessException(ErrorType.DUPLICATE_ENTRY, "Telefon numarası zaten kayıtlı");
             }
-            customer.setPhone(normalizeBlankToNull(request.phone()));
+            customer.setPhone(StringUtils.hasText(normalizedPhone) ? normalizedPhone : null);
         }
 
-
         if (request.email() != null) {
-            String normalizedEmail = normalizeBlankToNull(request.email());
+            String normalizedEmail = request.email().trim();
 
-            if (hasText(normalizedEmail)
-                    && !request.email().equalsIgnoreCase(customer.getEmail())
-                    && customerRepository.existsByEmailIgnoreCaseAndIsDeletedFalse(request.email())) {
-                throw new BusinessException(ErrorType.DUPLICATE_ENTRY, "Email already exists");
+            if (StringUtils.hasText(normalizedEmail)
+                    && !normalizedEmail.equalsIgnoreCase(customer.getEmail())
+                    && customerRepository.existsByEmailIgnoreCase(normalizedEmail)) {
+                throw new BusinessException(ErrorType.DUPLICATE_ENTRY, "E-posta adresi zaten kayıtlı");
             }
-            customer.setEmail(normalizeBlankToNull(request.email()));
+            customer.setEmail(StringUtils.hasText(normalizedEmail) ? normalizedEmail : null);
         }
 
         if (request.status() != null) {
             customer.setStatus(request.status());
         }
 
-        validatePhoneOrEmailPresent(customer.getPhone(), customer.getEmail());
-
         Customer updatedCustomer = customerRepository.save(customer);
+
+        log.info("Müşteri güncellendi: {}", id);
 
         return customerMapper.toResponse(updatedCustomer);
     }
@@ -150,54 +153,33 @@ public class CustomerService {
     }
 
 
-    private void validatePhoneOrEmailPresent(String phone, String email) {
-
-        if (!hasText(phone) && !hasText(email)) {
-            throw new BusinessException(ErrorType.VALIDATION_ERROR, "Phone or email must be provided");
-        }
-
-    }
-
     private void validateEmailIsUnique(String email) {
-
-        if (!hasText(email)) {
+        if (!StringUtils.hasText(email)) {
             return;
         }
-        if (customerRepository.existsByEmailIgnoreCaseAndIsDeletedFalse(email)) {
-            throw new BusinessException(ErrorType.DUPLICATE_ENTRY, "Email already exists");
+        if (customerRepository.existsByEmailIgnoreCase(email)) {
+            throw new BusinessException(ErrorType.DUPLICATE_ENTRY, "E-posta adresi zaten kayıtlı");
         }
     }
 
 
     private void validatePhoneIsUnique(String phone) {
-        if (!hasText(phone)) {
+        if (!StringUtils.hasText(phone)) {
             return;
         }
-        if (customerRepository.existsByPhoneAndIsDeletedFalse(phone)) {
-            throw new BusinessException(ErrorType.DUPLICATE_ENTRY, "Phone already exists");
+        if (customerRepository.existsByPhone(phone)) {
+            throw new BusinessException(ErrorType.DUPLICATE_ENTRY, "Telefon numarası zaten kayıtlı");
         }
-    }
-
-
-    private boolean hasText(String value) {
-        return value != null && !value.trim().isEmpty();
-    }
-
-    private String normalizeBlankToNull(String value) {
-        if (!hasText(value)) {
-            return null;
-        }
-        return value.trim();
     }
 
     private Customer findActiveCustomerById(UUID id) {
 
-        return customerRepository.findByIdAndIsDeletedFalse(id)
+        return customerRepository.findById(id)
                 .orElseThrow(() -> new BusinessException(ErrorType.NOT_FOUND, "Customer not found"));
     }
 
     private Tag findActiveTagById(UUID id) {
-        return tagRepository.findByIdAndIsDeletedFalse(id).orElseThrow(
+        return tagRepository.findById(id).orElseThrow(
                 () -> new BusinessException(ErrorType.NOT_FOUND, "Tag not found")
         );
 

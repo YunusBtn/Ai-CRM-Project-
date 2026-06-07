@@ -12,9 +12,9 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 
     Optional<User> findByEmail(String email);
 
-    Optional<User> findByIdAndIsDeletedFalse(UUID userId);
+    Optional<User> findById(UUID userId);
 
     boolean existsByEmail(String email);
 
-    Optional<User> findByIdAndIsDeletedFalseAndIsActiveTrue(UUID id);
+    Optional<User> findByIdAndIsActiveTrue(UUID id);
 }

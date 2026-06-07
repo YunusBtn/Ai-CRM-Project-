@@ -17,19 +17,19 @@ import java.util.UUID;
 @Repository
 public interface CustomerRepository extends JpaRepository<Customer, UUID>, JpaSpecificationExecutor<Customer> {
 
-    Optional<Customer> findByIdAndIsDeletedFalse(UUID id);
+    Optional<Customer> findById(UUID id);
 
-    Page<Customer> findAllByIsDeletedFalse(Pageable pageable);
+    Page<Customer> findAll(Pageable pageable);
 
-    boolean existsByEmailIgnoreCaseAndIsDeletedFalse(String email);
+    boolean existsByEmailIgnoreCase(String email);
 
-    boolean existsByPhoneAndIsDeletedFalse(String phone);
+    boolean existsByPhone(String phone);
 
-    long countByIsDeletedFalse();
+    long count();
 
-    long countByStatusAndIsDeletedFalse(CustomerStatus status);
+    long countByStatus(CustomerStatus status);
 
-    long countByCreatedAtBetweenAndIsDeletedFalse(LocalDateTime start, LocalDateTime end);
+    long countByCreatedAtBetween(LocalDateTime start, LocalDateTime end);
 
     @Query("""
             SELECT new com.yunus.dashboard.dto.TagCustomerCountResponse(

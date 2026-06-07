@@ -300,7 +300,7 @@ public class AiService {
 
     private Conversation findActiveConversationById(UUID id) {
         // Soft delete edilmemiş conversation kaydını bulur.
-        return conversationRepository.findByIdAndIsDeletedFalse(id)
+        return conversationRepository.findById(id)
                 .orElseThrow(() -> new BusinessException(ErrorType.NOT_FOUND, "Conversation not found"));
     }
 }

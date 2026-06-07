@@ -11,11 +11,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class TagService {
 
     private final TagRepository tagRepository;
@@ -24,12 +26,14 @@ public class TagService {
 
     @Transactional
     public TagResponse createTag(TagCreateRequest request) {
-        if (tagRepository.existsByNameIgnoreCaseAndIsDeletedFalse(request.name())) {
-            throw new BusinessException(ErrorType.DUPLICATE_ENTRY, "Tag already exists");
+        if (tagRepository.existsByNameIgnoreCase(request.name())) {
+            throw new BusinessException(ErrorType.DUPLICATE_ENTRY, "Etiket zaten mevcut");
         }
 
         Tag tag = tagMapper.toEntity(request);
         Tag savedTag = tagRepository.save(tag);
+        
+        log.info("Yeni etiket oluşturuldu: {}", savedTag.getName());
 
         return tagMapper.toResponse(savedTag);
 
@@ -45,7 +49,7 @@ public class TagService {
     @Transactional(readOnly = true)
     public PageResponse<TagResponse> getAllTags(Pageable pageable) {
 
-        Page<TagResponse> tagPage = tagRepository.findAllByIsDeletedFalse(pageable)
+        Page<TagResponse> tagPage = tagRepository.findAll(pageable)
                 .map(tagMapper::toResponse);
 
         return PageResponse.from(tagPage);
@@ -58,8 +62,8 @@ public class TagService {
         if (request.name()!= null && !request.name().isBlank()) {
 
             if (!tag.getName().equalsIgnoreCase(request.name())
-                    && tagRepository.existsByNameIgnoreCaseAndIsDeletedFalse(request.name())) {
-                throw new BusinessException(ErrorType.DUPLICATE_ENTRY, "Tag already exists");
+                    && tagRepository.existsByNameIgnoreCase(request.name())) {
+                throw new BusinessException(ErrorType.DUPLICATE_ENTRY, "Etiket zaten mevcut");
             }
             tag.setName(request.name());
         }
@@ -68,6 +72,7 @@ public class TagService {
             tag.setColor(request.color());
         }
         Tag updatedTag = tagRepository.save(tag);
+        log.info("Etiket güncellendi: {}", id);
         return tagMapper.toResponse(updatedTag);
     }
 
@@ -76,12 +81,13 @@ public class TagService {
         Tag tag = findActiveTagById(id);
         tag.setDeleted(true); //soft delete
         tagRepository.save(tag);
+        log.info("Etiket silindi: {}", id);
     }
 
 
     private Tag findActiveTagById(UUID id) {
-        return tagRepository.findByIdAndIsDeletedFalse(id).orElseThrow(
-                () -> new BusinessException(ErrorType.NOT_FOUND, "Tag not found")
+        return tagRepository.findById(id).orElseThrow(
+                () -> new BusinessException(ErrorType.NOT_FOUND, "Etiket bulunamadı")
         );
 
 

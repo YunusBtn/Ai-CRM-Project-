@@ -1,9 +1,11 @@
 package com.yunus.customer.dto;
 
+import com.yunus.common.validation.ValidContactInfo;
 import com.yunus.enums.CustomerStatus;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
 
+@ValidContactInfo
 public record CustomerUpdateRequest(
 
 

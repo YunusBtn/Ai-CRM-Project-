@@ -11,9 +11,9 @@ import java.util.UUID;
 @Repository
 public interface TagRepository extends JpaRepository<Tag, UUID> {
 
-    boolean existsByNameIgnoreCaseAndIsDeletedFalse(String name);
+    boolean existsByNameIgnoreCase(String name);
 
-    Optional<Tag> findByIdAndIsDeletedFalse(UUID id);
+    Optional<Tag> findById(UUID id);
 
-    Page<Tag> findAllByIsDeletedFalse(Pageable pageable);
+    Page<Tag> findAll(Pageable pageable);
 }

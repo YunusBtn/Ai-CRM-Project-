@@ -1,5 +1,6 @@
 package com.yunus.note;
 
+import com.yunus.common.ApiResponse;
 import com.yunus.common.PageResponse;
 import com.yunus.note.dto.NoteCreateRequest;
 import com.yunus.note.dto.NoteResponse;
@@ -26,60 +27,61 @@ public class NoteController {
     @Operation(summary = "Create note for customer")
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("create/{customerId}")
-    public NoteResponse createCustomerNote(
+    public ApiResponse<NoteResponse> createCustomerNote(
             @PathVariable UUID customerId,
             @Valid @RequestBody NoteCreateRequest request
     ) {
-        return noteService.createCustomerNote(customerId, request);
+        return ApiResponse.success(noteService.createCustomerNote(customerId, request));
     }
 
     @Operation(summary = "Get notes by customer id")
     @GetMapping("{customerId}")
-    public PageResponse<NoteResponse> getByCustomerId(
+    public ApiResponse<PageResponse<NoteResponse>> getByCustomerId(
             @PathVariable UUID customerId,
             @PageableDefault(size = 10, sort = "createdAt") Pageable pageable
     ) {
-        return noteService.getByCustomerId(customerId, pageable);
+        return ApiResponse.success(noteService.getByCustomerId(customerId, pageable));
     }
 
     @Operation(summary = "Create note for conversation")
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("conversationCreate/{conversationId}")
-    public NoteResponse createConversationNote(
+    public ApiResponse<NoteResponse> createConversationNote(
             @PathVariable UUID conversationId,
             @Valid @RequestBody NoteCreateRequest request
     ) {
-        return noteService.createConversationNote(conversationId, request);
+        return ApiResponse.success(noteService.createConversationNote(conversationId, request));
     }
 
     @Operation(summary = "Get notes by conversation id")
     @GetMapping("getConversation/{conversationId}")
-    public PageResponse<NoteResponse> getByConversationId(
+    public ApiResponse<PageResponse<NoteResponse>> getByConversationId(
             @PathVariable UUID conversationId,
             @PageableDefault(size = 10, sort = "createdAt") Pageable pageable
     ) {
-        return noteService.getByConversationId(conversationId, pageable);
+        return ApiResponse.success(noteService.getByConversationId(conversationId, pageable));
     }
 
     @Operation(summary = "Get note by id")
     @GetMapping("get/{id}")
-    public NoteResponse getById(@PathVariable UUID id) {
-        return noteService.getById(id);
+    public ApiResponse<NoteResponse> getById(@PathVariable UUID id) {
+        return ApiResponse.success(noteService.getById(id));
     }
 
     @Operation(summary = "Update note")
     @PutMapping("update/{id}")
-    public NoteResponse update(
+    public ApiResponse<NoteResponse> update(
             @PathVariable UUID id,
             @Valid @RequestBody NoteUpdateRequest request
     ) {
-        return noteService.update(id, request);
+        return ApiResponse.success(noteService.update(id, request));
     }
 
     @Operation(summary = "Delete note by id")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("delete/{id}")
-    public void delete(@PathVariable UUID id) {
+    public ApiResponse<Void> delete(@PathVariable UUID id) {
         noteService.delete(id);
+        return ApiResponse.success(null, "Not başarıyla silindi");
     }
 }

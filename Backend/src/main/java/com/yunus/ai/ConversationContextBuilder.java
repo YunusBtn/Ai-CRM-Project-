@@ -30,7 +30,7 @@ public class ConversationContextBuilder {
 
     public AiConversationContext build(UUID conversationId) {
         // Önce aktif ve silinmemiş conversation kaydını buluyoruz.
-        Conversation conversation = conversationRepository.findByIdAndIsDeletedFalse(conversationId)
+        Conversation conversation = conversationRepository.findById(conversationId)
                 .orElseThrow(() -> new BusinessException(ErrorType.NOT_FOUND, "Conversation not found"));
 
         // Conversation'a bağlı customer bilgisini alıyoruz.

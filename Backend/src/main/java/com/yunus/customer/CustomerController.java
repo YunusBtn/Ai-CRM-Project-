@@ -1,5 +1,6 @@
 package com.yunus.customer;
 
+import com.yunus.common.ApiResponse;
 import com.yunus.common.PageResponse;
 import com.yunus.customer.dto.CustomerCreateRequest;
 import com.yunus.customer.dto.CustomerResponse;
@@ -27,58 +28,59 @@ public class CustomerController {
     @PostMapping("/create")
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Create a new customer")
-    public CustomerResponse createCustomer(@RequestBody @Valid CustomerCreateRequest request) {
-        return customerService.createCustomer(request);
+    public ApiResponse<CustomerResponse> createCustomer(@RequestBody @Valid CustomerCreateRequest request) {
+        return ApiResponse.success(customerService.createCustomer(request));
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "Get a customer by ID")
-    public CustomerResponse getCustomerById(@PathVariable UUID id) {
-        return customerService.getCustomerById(id);
+    public ApiResponse<CustomerResponse> getCustomerById(@PathVariable UUID id) {
+        return ApiResponse.success(customerService.getCustomerById(id));
     }
 
 
 
     @Operation(summary = "Get ALL Customers with pagination and specification")
     @GetMapping("/all")
-    public PageResponse<CustomerResponse> getAllCustomers(
+    public ApiResponse<PageResponse<CustomerResponse>> getAllCustomers(
             @RequestParam(required = false) String search,
             @RequestParam(required = false) CustomerStatus status,
             @RequestParam(required = false)  UUID tagId,
             @PageableDefault(size = 10, sort = "createdAt") Pageable pageable) {
-        return customerService.getAllCustomers(search,status,tagId,pageable);
+        return ApiResponse.success(customerService.getAllCustomers(search,status,tagId,pageable));
     }
 
 
     @PutMapping("/{id}")
     @Operation(summary = "Update a customer by ID")
-    public CustomerResponse updateCustomer(
+    public ApiResponse<CustomerResponse> updateCustomer(
             @PathVariable UUID id, @RequestBody @Valid CustomerUpdateRequest request) {
-        return customerService.updateCustomer(id, request);
+        return ApiResponse.success(customerService.updateCustomer(id, request));
     }
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete a customer by ID")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteCustomer(@PathVariable UUID id) {
+    public ApiResponse<Void> deleteCustomer(@PathVariable UUID id) {
         customerService.deleteCustomer(id);
+        return ApiResponse.success(null, "Müşteri başarıyla silindi");
     }
 
     @PostMapping("/{customerId}/tags/{tagId}")
     @Operation(summary = "Add a tag to a customer")
-    public CustomerResponse addTagToCustomer(
+    public ApiResponse<CustomerResponse> addTagToCustomer(
             @PathVariable UUID customerId,
             @PathVariable UUID tagId) {
-        return customerService.addTagToCustomer(customerId, tagId);
+        return ApiResponse.success(customerService.addTagToCustomer(customerId, tagId));
     }
 
 
     @DeleteMapping("/{customerId}/tags/{tagId}")
     @Operation(summary = "Remove a tag from a customer")
-    public CustomerResponse removeTagFromCustomer(
+    public ApiResponse<CustomerResponse> removeTagFromCustomer(
             @PathVariable UUID customerId,
             @PathVariable UUID tagId) {
-        return customerService.removeTagFromCustomer(customerId, tagId);
+        return ApiResponse.success(customerService.removeTagFromCustomer(customerId, tagId));
     }
 
 
