@@ -1,4 +1,4 @@
-# 🧠 AI-Powered Message-Based CRM & Automation Platform
+# 🧠 AI-Assisted Message-Based CRM Backend
 
 > Mesaj tabanlı müşteri iletişimini merkezi olarak yöneten, AI destekli temsilci asistanı özellikleri sunan backend sistemi.
 
@@ -13,6 +13,14 @@ Proje, gereksiz teknoloji eklemekten kaçınarak **fazlara bölünmüş, her faz
 ---
 
 ## ✨ Özellikler
+---
+
+## 🔒 Güvenlik Modeli
+
+- **Roller**: Sistemde ADMIN ve AGENT olmak üzere iki rol tanımlıdır.
+- **Ortak Gelen Kutusu (Tasarım Kararı)**: Tüm AGENT kullanıcıları ortak gelen kutusundaki müşteri ve konuşmaları görüntüleyebilir. Temsilciler arası yardımlaşma ve şeffaf operasyon amacıyla genel müşteri ve konuşma listeleri tüm temsilcilere açıktır.
+- **Not Sahipliği İzolasyonu**: Notlar (Note) müşteri veya görüşme bazında eklenebilir, ancak bir not yalnızca onu oluşturan (createdBy) kullanıcı tarafından düzenlenebilir veya silinebilir. Başka bir temsilci notu değiştiremez.
+- **Token Ömrü**: JWT token süresi 24 saat (86400000 ms) olarak belirlenmiştir. Sistemde refresh token mekanizması bulunmamaktadır (stateless JWT).
 
 ### 🔐 Kimlik Doğrulama & Yetkilendirme
 - JWT tabanlı kimlik doğrulama
@@ -224,7 +232,7 @@ Uygulama ayağa kalktığında `DataInitializer` otomatik olarak çalışır ve 
 
 ---
 
-## 📡 API Endpoint'leri
+## 📡 API Endpoint'leri (Toplam: 36 Endpoint)
 
 ### Auth
 | Method | Endpoint | Açıklama |
@@ -323,7 +331,7 @@ Gelişmiş filtreleme (Specification pattern), bana atanmış / atanmamış / ce
 OpenAI tabanlı cevap önerisi, konuşma özeti, sınıflandırma ve etiket önerisi. AI çıktıları `ai_result` tablosunda saklanır, temsilci kontrolü korunur.
 
 ### 🔜 Faz 4 — Otomasyon Katmanı *(Planlanan)*
-Event bazlı trigger-action sistemi, webhook entegrasyonu, otomatik görev oluşturma.
+İş akışı tabanlı takip eylemleri (workflow-based follow-up actions), Spring AI desteği, event bazlı trigger-action sistemi, webhook entegrasyonu, otomatik görev oluşturma.
 
 ### 🔜 Faz 5 — Gelişmiş Sistemleşme *(Planlanan)*
 WhatsApp Business API, WebSocket/SSE, CI/CD pipeline, multi-tenant yapı, Redis cache.
@@ -368,7 +376,7 @@ Spring `Page<T>` çok fazla metadata döner. Frontend için sade, tutarlı bir r
 
 **Yunus Emre**
 - Backend Developer
-- Java | Spring Boot | PostgreSQL | Docker | CI/CD | Redis | Spring Ai | jUnit/Mockito
+- Java | Spring Boot | PostgreSQL | Docker | JUnit 5 | Mockito | MapStruct
 
 ---
 
