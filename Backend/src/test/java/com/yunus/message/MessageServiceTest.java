@@ -88,7 +88,7 @@ class MessageServiceTest {
         );
 
         // Conversation bulma stub'ı (çoğu test için geçerli)
-        when(conversationRepository.findByIdAndIsDeletedFalse(conversationId))
+        when(conversationRepository.findById(conversationId))
                 .thenReturn(Optional.of(conversation));
     }
 
@@ -271,7 +271,7 @@ class MessageServiceTest {
     void create_WhenConversationNotFound_ShouldThrowNotFoundBusinessException() {
         // Arrange
         UUID unknownId = UUID.randomUUID();
-        when(conversationRepository.findByIdAndIsDeletedFalse(unknownId))
+        when(conversationRepository.findById(unknownId))
                 .thenReturn(Optional.empty());
 
         MessageCreateRequest request = new MessageCreateRequest(

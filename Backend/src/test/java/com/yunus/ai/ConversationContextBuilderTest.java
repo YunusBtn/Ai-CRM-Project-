@@ -75,7 +75,7 @@ class ConversationContextBuilderTest {
 
         // Varsayılan config: son 20 mesaj
         when(aiProperties.getMaxContextMessages()).thenReturn(20);
-        when(conversationRepository.findByIdAndIsDeletedFalse(conversationId))
+        when(conversationRepository.findById(conversationId))
                 .thenReturn(Optional.of(conversation));
     }
 
@@ -238,7 +238,7 @@ class ConversationContextBuilderTest {
     void build_WhenConversationNotFound_ShouldThrowNotFoundBusinessException() {
         // Arrange
         UUID unknownId = UUID.randomUUID();
-        when(conversationRepository.findByIdAndIsDeletedFalse(unknownId))
+        when(conversationRepository.findById(unknownId))
                 .thenReturn(Optional.empty());
 
         // Act & Assert

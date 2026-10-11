@@ -8,6 +8,7 @@ import com.yunus.exception.ErrorType;
 import com.yunus.tag.Tag;
 import com.yunus.tag.TagRepository;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -77,6 +78,7 @@ class CustomerServiceTest {
     // ─────────────────────────────────────────────────────────────────────────
 
     @Test
+    @Disabled("createCustomer icindeki validasyon kaldirilip @ValidContactInfo DTO seviyesine tasindi; servis katmaninda kontrol edilmiyor")
     @DisplayName("createCustomer hem phone hem email null ise VALIDATION_ERROR fırlatılmalı")
     void createCustomer_WhenBothPhoneAndEmailNull_ShouldThrowValidationError() {
         // Arrange
@@ -92,6 +94,7 @@ class CustomerServiceTest {
     }
 
     @Test
+    @Disabled("createCustomer icindeki validasyon kaldirilip @ValidContactInfo DTO seviyesine tasindi; servis katmaninda kontrol edilmiyor")
     @DisplayName("createCustomer hem phone hem email boş string ise VALIDATION_ERROR fırlatılmalı")
     void createCustomer_WhenBothPhoneAndEmailBlank_ShouldThrowValidationError() {
         // Arrange
@@ -109,7 +112,7 @@ class CustomerServiceTest {
     void createCustomer_WhenDuplicatePhone_ShouldThrowDuplicateEntry() {
         // Arrange
         CustomerCreateRequest request = new CustomerCreateRequest("Ali", "Veli", "05001234567", null);
-        when(customerRepository.existsByPhoneAndIsDeletedFalse("05001234567")).thenReturn(true);
+        when(customerRepository.existsByPhone("05001234567")).thenReturn(true);
 
         // Act & Assert
         assertThatThrownBy(() -> customerService.createCustomer(request))
@@ -125,7 +128,7 @@ class CustomerServiceTest {
     void createCustomer_WhenDuplicateEmail_ShouldThrowDuplicateEntry() {
         // Arrange
         CustomerCreateRequest request = new CustomerCreateRequest("Ali", "Veli", null, "ali@test.com");
-        when(customerRepository.existsByEmailIgnoreCaseAndIsDeletedFalse("ali@test.com")).thenReturn(true);
+        when(customerRepository.existsByEmailIgnoreCase("ali@test.com")).thenReturn(true);
 
         // Act & Assert
         assertThatThrownBy(() -> customerService.createCustomer(request))
@@ -141,7 +144,7 @@ class CustomerServiceTest {
     void createCustomer_WhenValid_ShouldSaveAndReturnResponse() {
         // Arrange
         CustomerCreateRequest request = new CustomerCreateRequest("Ali", "Veli", null, "ali@test.com");
-        when(customerRepository.existsByEmailIgnoreCaseAndIsDeletedFalse("ali@test.com")).thenReturn(false);
+        when(customerRepository.existsByEmailIgnoreCase("ali@test.com")).thenReturn(false);
         when(customerMapper.toEntity(request)).thenReturn(customer);
         when(customerRepository.save(customer)).thenReturn(customer);
         when(customerMapper.toResponse(customer)).thenReturn(customerResponse);
@@ -162,7 +165,7 @@ class CustomerServiceTest {
     @DisplayName("deleteCustomer çağrıldığında isDeleted true yapılmalı ve save çağrılmalı")
     void deleteCustomer_WhenSuccess_ShouldMarkAsDeletedAndSave() {
         // Arrange
-        when(customerRepository.findByIdAndIsDeletedFalse(customerId)).thenReturn(Optional.of(customer));
+        when(customerRepository.findById(customerId)).thenReturn(Optional.of(customer));
 
         // Act
         customerService.deleteCustomer(customerId);
@@ -176,7 +179,7 @@ class CustomerServiceTest {
     @DisplayName("deleteCustomer customer bulunamazsa NOT_FOUND fırlatılmalı")
     void deleteCustomer_WhenCustomerNotFound_ShouldThrowNotFound() {
         // Arrange
-        when(customerRepository.findByIdAndIsDeletedFalse(customerId)).thenReturn(Optional.empty());
+        when(customerRepository.findById(customerId)).thenReturn(Optional.empty());
 
         // Act & Assert
         assertThatThrownBy(() -> customerService.deleteCustomer(customerId))
@@ -195,8 +198,8 @@ class CustomerServiceTest {
     @DisplayName("addTagToCustomer customer ve tag bulunmalı, tag customer.tags listesine eklenmeli")
     void addTagToCustomer_WhenSuccess_ShouldAddTagToCustomer() {
         // Arrange
-        when(customerRepository.findByIdAndIsDeletedFalse(customerId)).thenReturn(Optional.of(customer));
-        when(tagRepository.findByIdAndIsDeletedFalse(tagId)).thenReturn(Optional.of(tag));
+        when(customerRepository.findById(customerId)).thenReturn(Optional.of(customer));
+        when(tagRepository.findById(tagId)).thenReturn(Optional.of(tag));
         when(customerRepository.save(customer)).thenReturn(customer);
         when(customerMapper.toResponse(customer)).thenReturn(customerResponse);
 
@@ -212,7 +215,7 @@ class CustomerServiceTest {
     @DisplayName("addTagToCustomer customer bulunamazsa NOT_FOUND fırlatılmalı")
     void addTagToCustomer_WhenCustomerNotFound_ShouldThrowNotFound() {
         // Arrange
-        when(customerRepository.findByIdAndIsDeletedFalse(customerId)).thenReturn(Optional.empty());
+        when(customerRepository.findById(customerId)).thenReturn(Optional.empty());
 
         // Act & Assert
         assertThatThrownBy(() -> customerService.addTagToCustomer(customerId, tagId))
@@ -227,8 +230,8 @@ class CustomerServiceTest {
     @DisplayName("addTagToCustomer tag bulunamazsa NOT_FOUND fırlatılmalı")
     void addTagToCustomer_WhenTagNotFound_ShouldThrowNotFound() {
         // Arrange
-        when(customerRepository.findByIdAndIsDeletedFalse(customerId)).thenReturn(Optional.of(customer));
-        when(tagRepository.findByIdAndIsDeletedFalse(tagId)).thenReturn(Optional.empty());
+        when(customerRepository.findById(customerId)).thenReturn(Optional.of(customer));
+        when(tagRepository.findById(tagId)).thenReturn(Optional.empty());
 
         // Act & Assert
         assertThatThrownBy(() -> customerService.addTagToCustomer(customerId, tagId))
@@ -248,8 +251,8 @@ class CustomerServiceTest {
     void removeTagFromCustomer_WhenSuccess_ShouldRemoveTagFromCustomer() {
         // Arrange
         customer.getTags().add(tag); // önce tag'i ekle
-        when(customerRepository.findByIdAndIsDeletedFalse(customerId)).thenReturn(Optional.of(customer));
-        when(tagRepository.findByIdAndIsDeletedFalse(tagId)).thenReturn(Optional.of(tag));
+        when(customerRepository.findById(customerId)).thenReturn(Optional.of(customer));
+        when(tagRepository.findById(tagId)).thenReturn(Optional.of(tag));
         when(customerRepository.save(customer)).thenReturn(customer);
         when(customerMapper.toResponse(customer)).thenReturn(customerResponse);
 
@@ -265,7 +268,7 @@ class CustomerServiceTest {
     @DisplayName("removeTagFromCustomer customer bulunamazsa NOT_FOUND fırlatılmalı")
     void removeTagFromCustomer_WhenCustomerNotFound_ShouldThrowNotFound() {
         // Arrange
-        when(customerRepository.findByIdAndIsDeletedFalse(customerId)).thenReturn(Optional.empty());
+        when(customerRepository.findById(customerId)).thenReturn(Optional.empty());
 
         // Act & Assert
         assertThatThrownBy(() -> customerService.removeTagFromCustomer(customerId, tagId))

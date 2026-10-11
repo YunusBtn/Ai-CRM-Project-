@@ -117,7 +117,7 @@ class ConversationServiceTest {
         ConversationCreateRequest request = new ConversationCreateRequest("Test Başlık", null);
         Conversation mappedConversation = new Conversation();
 
-        when(customerRepository.findByIdAndIsDeletedFalse(customerId)).thenReturn(Optional.of(customer));
+        when(customerRepository.findById(customerId)).thenReturn(Optional.of(customer));
         when(conversationMapper.toEntity(request)).thenReturn(mappedConversation);
         when(conversationRepository.save(any(Conversation.class))).thenReturn(conversation);
         when(conversationMapper.toResponse(conversation)).thenReturn(conversationResponse);
@@ -139,9 +139,9 @@ class ConversationServiceTest {
         ConversationCreateRequest request = new ConversationCreateRequest("Test Başlık", assignedToId);
         Conversation mappedConversation = new Conversation();
 
-        when(customerRepository.findByIdAndIsDeletedFalse(customerId)).thenReturn(Optional.of(customer));
+        when(customerRepository.findById(customerId)).thenReturn(Optional.of(customer));
         when(conversationMapper.toEntity(request)).thenReturn(mappedConversation);
-        when(userRepository.findByIdAndIsDeletedFalseAndIsActiveTrue(assignedToId))
+        when(userRepository.findByIdAndIsActiveTrue(assignedToId))
                 .thenReturn(Optional.of(agentUser));
         when(conversationRepository.save(any(Conversation.class))).thenReturn(conversation);
         when(conversationMapper.toResponse(conversation)).thenReturn(conversationResponse);
@@ -157,7 +157,7 @@ class ConversationServiceTest {
     @DisplayName("createConversation customer bulunamazsa NOT_FOUND fırlatılmalı")
     void createConversation_WhenCustomerNotFound_ShouldThrowNotFound() {
         // Arrange
-        when(customerRepository.findByIdAndIsDeletedFalse(customerId)).thenReturn(Optional.empty());
+        when(customerRepository.findById(customerId)).thenReturn(Optional.empty());
         ConversationCreateRequest request = new ConversationCreateRequest("Test", null);
 
         // Act & Assert
@@ -177,7 +177,7 @@ class ConversationServiceTest {
     @DisplayName("getById aktif conversation döndürülmeli")
     void getById_WhenConversationExists_ShouldReturnConversationResponse() {
         // Arrange
-        when(conversationRepository.findByIdAndIsDeletedFalse(conversationId))
+        when(conversationRepository.findById(conversationId))
                 .thenReturn(Optional.of(conversation));
         when(conversationMapper.toResponse(conversation)).thenReturn(conversationResponse);
 
@@ -193,7 +193,7 @@ class ConversationServiceTest {
     @DisplayName("getById conversation bulunamazsa NOT_FOUND fırlatılmalı")
     void getById_WhenConversationNotFound_ShouldThrowNotFound() {
         // Arrange
-        when(conversationRepository.findByIdAndIsDeletedFalse(conversationId))
+        when(conversationRepository.findById(conversationId))
                 .thenReturn(Optional.empty());
 
         // Act & Assert
@@ -212,7 +212,7 @@ class ConversationServiceTest {
     void updateStatus_WhenSuccess_ShouldUpdateStatusAndSave() {
         // Arrange
         ConversationStatusUpdateRequest request = new ConversationStatusUpdateRequest(ConversationStatus.CLOSED);
-        when(conversationRepository.findByIdAndIsDeletedFalse(conversationId))
+        when(conversationRepository.findById(conversationId))
                 .thenReturn(Optional.of(conversation));
         when(conversationRepository.save(conversation)).thenReturn(conversation);
         when(conversationMapper.toResponse(conversation)).thenReturn(conversationResponse);
@@ -236,9 +236,9 @@ class ConversationServiceTest {
         UUID assignedToId = UUID.randomUUID();
         ConversationAssignRequest request = new ConversationAssignRequest(assignedToId);
 
-        when(conversationRepository.findByIdAndIsDeletedFalse(conversationId))
+        when(conversationRepository.findById(conversationId))
                 .thenReturn(Optional.of(conversation));
-        when(userRepository.findByIdAndIsDeletedFalseAndIsActiveTrue(assignedToId))
+        when(userRepository.findByIdAndIsActiveTrue(assignedToId))
                 .thenReturn(Optional.of(agentUser));
         when(conversationRepository.save(conversation)).thenReturn(conversation);
         when(conversationMapper.toResponse(conversation)).thenReturn(conversationResponse);
@@ -259,7 +259,7 @@ class ConversationServiceTest {
     @DisplayName("deleteConversation çağrıldığında isDeleted true yapılmalı ve save çağrılmalı")
     void deleteConversation_WhenSuccess_ShouldMarkDeletedAndSave() {
         // Arrange
-        when(conversationRepository.findByIdAndIsDeletedFalse(conversationId))
+        when(conversationRepository.findById(conversationId))
                 .thenReturn(Optional.of(conversation));
 
         // Act
@@ -284,7 +284,7 @@ class ConversationServiceTest {
         Pageable pageable = PageRequest.of(0, 10);
         Page<Conversation> conversationPage = new PageImpl<>(Collections.emptyList(), pageable, 0);
 
-        when(conversationRepository.findAllByAssignedToIdAndStatusInAndIsDeletedFalse(
+        when(conversationRepository.findAllByAssignedToIdAndStatusIn(
                 nullable(UUID.class), anyList(), eq(pageable)))
                 .thenReturn(conversationPage);
 
@@ -293,9 +293,9 @@ class ConversationServiceTest {
 
         // Assert
         assertThat(result).isNotNull();
-        verify(conversationRepository).findAllByAssignedToIdAndStatusInAndIsDeletedFalse(
+        verify(conversationRepository).findAllByAssignedToIdAndStatusIn(
                 nullable(UUID.class),
-                argThat(statuses -> statuses.contains(ConversationStatus.OPEN)
+                argThat((List<ConversationStatus> statuses) -> statuses.contains(ConversationStatus.OPEN)
                         && statuses.contains(ConversationStatus.PENDING)),
                 eq(pageable)
         );
@@ -312,7 +312,7 @@ class ConversationServiceTest {
         Pageable pageable = PageRequest.of(0, 10);
         Page<Conversation> conversationPage = new PageImpl<>(Collections.emptyList(), pageable, 0);
 
-        when(conversationRepository.findAllByAssignedToIsNullAndStatusInAndIsDeletedFalse(
+        when(conversationRepository.findAllByAssignedToIsNullAndStatusIn(
                 anyList(), eq(pageable)))
                 .thenReturn(conversationPage);
 
@@ -321,8 +321,8 @@ class ConversationServiceTest {
 
         // Assert
         assertThat(result).isNotNull();
-        verify(conversationRepository).findAllByAssignedToIsNullAndStatusInAndIsDeletedFalse(
-                argThat(statuses -> statuses.contains(ConversationStatus.OPEN)
+        verify(conversationRepository).findAllByAssignedToIsNullAndStatusIn(
+                argThat((List<ConversationStatus> statuses) -> statuses.contains(ConversationStatus.OPEN)
                         && statuses.contains(ConversationStatus.PENDING)),
                 eq(pageable)
         );
@@ -348,7 +348,7 @@ class ConversationServiceTest {
         // Assert
         assertThat(result).isNotNull();
         verify(conversationRepository).findWaitingConversations(
-                argThat(statuses -> statuses.contains(ConversationStatus.OPEN)
+                argThat((List<ConversationStatus> statuses) -> statuses.contains(ConversationStatus.OPEN)
                         && statuses.contains(ConversationStatus.PENDING)),
                 any(),
                 eq(pageable)

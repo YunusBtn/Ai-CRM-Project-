@@ -115,7 +115,7 @@ class AiServiceTest {
         );
 
         // Ortak stub'lar
-        when(conversationRepository.findByIdAndIsDeletedFalse(conversationId))
+        when(conversationRepository.findById(conversationId))
                 .thenReturn(Optional.of(conversation));
         when(currentUserService.getCurrentUser()).thenReturn(requestedBy);
         when(conversationContextBuilder.build(conversationId)).thenReturn(context);
@@ -334,7 +334,7 @@ class AiServiceTest {
     void generateReplySuggestion_WhenConversationNotFound_ShouldThrowBusinessException() {
         // Arrange
         UUID unknownId = UUID.randomUUID();
-        when(conversationRepository.findByIdAndIsDeletedFalse(unknownId))
+        when(conversationRepository.findById(unknownId))
                 .thenReturn(Optional.empty());
 
         // Act & Assert

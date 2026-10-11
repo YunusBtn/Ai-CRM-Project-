@@ -236,7 +236,7 @@ class AuthServiceTest {
 
         UserRoleUpdateRequest request = new UserRoleUpdateRequest(Role.RoleName.ADMIN);
 
-        when(userRepository.findByIdAndIsDeletedFalse(userId)).thenReturn(Optional.of(savedUser));
+        when(userRepository.findById(userId)).thenReturn(Optional.of(savedUser));
         when(roleRepository.findByName(Role.RoleName.ADMIN)).thenReturn(Optional.of(adminRole));
 
         // Act
@@ -254,7 +254,7 @@ class AuthServiceTest {
         UUID userId = UUID.randomUUID();
         UserRoleUpdateRequest request = new UserRoleUpdateRequest(Role.RoleName.ADMIN);
 
-        when(userRepository.findByIdAndIsDeletedFalse(userId)).thenReturn(Optional.empty());
+        when(userRepository.findById(userId)).thenReturn(Optional.empty());
 
         // Act & Assert
         assertThatThrownBy(() -> authService.updateUserRole(userId, request))
@@ -273,7 +273,7 @@ class AuthServiceTest {
         UUID userId = UUID.randomUUID();
         UserRoleUpdateRequest request = new UserRoleUpdateRequest(Role.RoleName.ADMIN);
 
-        when(userRepository.findByIdAndIsDeletedFalse(userId)).thenReturn(Optional.of(savedUser));
+        when(userRepository.findById(userId)).thenReturn(Optional.of(savedUser));
         when(roleRepository.findByName(Role.RoleName.ADMIN)).thenReturn(Optional.empty());
 
         // Act & Assert
