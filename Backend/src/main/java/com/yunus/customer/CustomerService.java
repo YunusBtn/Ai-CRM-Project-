@@ -36,6 +36,7 @@ public class CustomerService {
         validatePhoneIsUnique(request.phone());
 
         Customer customer = customerMapper.toEntity(request);
+        if (customer.getStatus() == null) { customer.setStatus(com.yunus.enums.CustomerStatus.ACTIVE); }
         Customer savedCustomer = customerRepository.save(customer);
 
         log.info("Yeni müşteri oluşturuldu: {} {}", savedCustomer.getFirstName(), savedCustomer.getLastName());

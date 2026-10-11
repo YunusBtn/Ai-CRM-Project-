@@ -21,10 +21,14 @@ public class OpenAiProvider implements AiProvider {
 
     private final ObjectMapper objectMapper;
     private final RestClient openAiRestClient;
+    private final com.yunus.ai.config.AiProperties aiProperties;
 
 
     @Override
     public AiProviderResponse generate(AiProviderRequest request) {
+        if (aiProperties.getApiKey() == null || aiProperties.getApiKey().isBlank()) {
+            throw new BusinessException(ErrorType.AI_PROVIDER_ERROR, "OpenAI API anahtari yapilandirilmamis. AI servisi su an kullanilamiyor.");
+        }
         try {
             // OpenAI'a gönderilecek request body hazırlanır.
             Map<String, Object> body = buildRequestBody(request);

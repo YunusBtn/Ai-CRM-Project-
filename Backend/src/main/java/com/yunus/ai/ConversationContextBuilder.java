@@ -68,7 +68,7 @@ public class ConversationContextBuilder {
                 conversation.getStatus().name(),
                 customer.getId(),
                 buildCustomerFullName(customer),
-                customer.getStatus().name(),
+                (customer.getStatus() != null ? customer.getStatus().name() : "ACTIVE"),
                 customerTags,
                 contextMessages,
                 contextMessages.size()
